@@ -1,0 +1,973 @@
+{
+	"info": {
+		"_postman_id": "ba1139d9-c3a8-47a6-a050-5976e820f0ec",
+		"name": "Task Manager API",
+		"description": "# Task Manager API\n\n## Introduction\n\nThe **Task Manager API** is a RESTful service designed to help you manage tasks efficiently. This API provides comprehensive endpoints for creating, reading, updating, and deleting tasks, as well as powerful bulk operations for managing multiple tasks simultaneously. Whether you're building a to-do application, project management tool, or any task-tracking system, this API provides all the functionality you need.\n\n## Base URL\n\n```\nhttp://localhost:3000/api/tasks\n```\n\nAll endpoints are relative to this base URL. The API follows RESTful conventions and uses standard HTTP methods (GET, POST, PUT, PATCH, DELETE).\n\n---\n\n## Collection Structure\n\nThis collection is organized into two main folders to help you quickly find the operations you need:\n\n### 📁 Single Operations\nContains endpoints for working with individual tasks. Use these when you need to:\n- Retrieve all tasks or filter by status\n- Get details of a specific task\n- Create new tasks (with full or minimal data)\n- Update existing task information\n- Delete individual tasks\n- Toggle a single task's completion status\n\n**Use cases:** Day-to-day task management, viewing task details, making individual updates.\n\n### 📁 Bulk Operations (New)\nContains powerful endpoints for performing operations on multiple tasks at once. Use these when you need to:\n- Toggle completion status for all tasks or tasks with a specific status\n- Delete multiple tasks by status\n- Clear all tasks (with or without safety confirmation)\n\n**Use cases:** Batch processing, cleanup operations, mass status updates, administrative tasks.\n\n---\n\n## Key Features\n\n✅ **Complete CRUD Operations** - Create, read, update, and delete tasks with ease  \n✅ **Status Management** - Track tasks as \"pending\" or \"completed\"  \n✅ **Flexible Filtering** - Retrieve tasks by status or ID  \n✅ **Bulk Operations** - Efficiently manage multiple tasks in a single request  \n✅ **Safety Mechanisms** - Confirmation parameters for destructive bulk operations  \n✅ **Minimal & Full Modes** - Create tasks with required fields only or include all details\n\n---\n\n## Getting Started\n\n### Quick Start Guide\n\n1. **Retrieve all tasks** - Start by calling `GET /api/tasks` to see existing tasks\n2. **Create your first task** - Use `POST /api/tasks` with a JSON body containing task details\n3. **Update task status** - Use `PATCH /api/tasks/{id}/toggle` to mark tasks as complete\n4. **Filter by status** - Use `GET /api/tasks/status/{status}` to view pending or completed tasks\n5. **Bulk operations** - Explore the Bulk Operations folder for managing multiple tasks\n\n### Prerequisites\n\n- Ensure the API server is running on `localhost:3000`\n- No authentication is currently required for this API\n- All requests should use `Content-Type: application/json` for POST/PUT/PATCH operations\n\n---\n\n## Available Endpoints\n\n### 📋 Retrieval Operations\n\n| Method | Endpoint | Description |\n|--------|----------|-------------|\n| GET | `/api/tasks` | Retrieve all tasks |\n| GET | `/api/tasks/{id}` | Get a specific task by ID |\n| GET | `/api/tasks/status/pending` | Get all pending tasks |\n| GET | `/api/tasks/status/completed` | Get all completed tasks |\n\n### ➕ Creation Operations\n\n| Method | Endpoint | Description |\n|--------|----------|-------------|\n| POST | `/api/tasks` | Create a new task with full details |\n| POST | `/api/tasks` | Create a task with minimal required fields |\n\n### ✏️ Update Operations\n\n| Method | Endpoint | Description |\n|--------|----------|-------------|\n| PUT | `/api/tasks/{id}` | Update an existing task (full replacement) |\n| PATCH | `/api/tasks/{id}/toggle` | Toggle task completion status |\n\n### 🗑️ Deletion Operations\n\n| Method | Endpoint | Description |\n|--------|----------|-------------|\n| DELETE | `/api/tasks/{id}` | Delete a specific task |\n\n### ⚡ Bulk Operations\n\n| Method | Endpoint | Description |\n|--------|----------|-------------|\n| PATCH | `/api/tasks/bulk/toggle-status/pending` | Mark all pending tasks as completed |\n| PATCH | `/api/tasks/bulk/toggle-status/completed` | Mark all completed tasks as pending |\n| PATCH | `/api/tasks/bulk/toggle-all` | Toggle status of all tasks |\n| DELETE | `/api/tasks/bulk/delete-status/completed` | Delete all completed tasks |\n| DELETE | `/api/tasks/bulk/delete-all` | Delete all tasks (use with caution) |\n| DELETE | `/api/tasks/bulk/delete-all?confirm=true` | Delete all tasks with safety confirmation |\n\n---\n\n## Authentication\n\nCurrently, this API does not require authentication. All endpoints are publicly accessible on the local development server.\n\n---\n\n## Error Handling\n\nThe API uses standard HTTP status codes:\n\n- **200 OK** - Request succeeded\n- **201 Created** - Resource successfully created\n- **400 Bad Request** - Invalid request data\n- **404 Not Found** - Resource not found\n- **500 Internal Server Error** - Server error\n\nError responses include descriptive messages to help you troubleshoot issues.\n\n---\n\n## Best Practices\n\n### ✅ Do's\n- Use the **minimal creation endpoint** when you only have basic task information\n- Always use the **safety confirmation parameter** (`?confirm=true`) for bulk delete operations\n- Filter tasks by status to reduce payload size when working with large datasets\n- Use **bulk operations** when modifying multiple tasks to reduce API calls\n\n### ⚠️ Don'ts\n- Avoid calling bulk delete endpoints without the confirmation parameter in production\n- Don't use PUT requests when you only need to update specific fields (use PATCH instead)\n- Avoid making individual API calls in loops - use bulk operations instead\n\n---\n\n## Support & Feedback\n\nFor questions, issues, or feature requests, please contact your development team or refer to the project documentation.\n\n**Happy Task Managing! 🚀**",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49451043",
+		"_collection_link": "https://osborntulasi-3252931.postman.co/workspace/690c942c-d9ea-4ed4-83fd-71273706ecb6/collection/49451043-ba1139d9-c3a8-47a6-a050-5976e820f0ec?action=share&source=collection_link&creator=49451043"
+	},
+	"item": [
+		{
+			"name": "Single Operations",
+			"item": [
+				{
+					"name": "Get All Tasks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test: Status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Test: Response body has 'success' property set to true",
+									"pm.test(\"Response has 'success' property set to true\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', true);",
+									"});",
+									"",
+									"// Test: 'data' property is an array",
+									"pm.test(\"'data' property is an array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data').that.is.an('array');",
+									"});",
+									"",
+									"// Test: 'count' property matches the length of the 'data' array",
+									"pm.test(\"'count' matches length of 'data' array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('count');",
+									"    pm.expect(jsonData).to.have.property('data').that.is.an('array');",
+									"    pm.expect(jsonData.count).to.eql(jsonData.data.length);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Task(By ID)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test: Status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Test: Response body has 'success' property set to true",
+									"pm.test(\"Response body has 'success' property set to true\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', true);",
+									"});",
+									"",
+									"// Test: Data object contains expected properties",
+									"pm.test(\"Data object contains expected properties\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"    pm.expect(jsonData.data).to.be.an('object');",
+									"    pm.expect(jsonData.data).to.have.all.keys('id', 'title', 'description', 'status');",
+									"});",
+									"",
+									"// Test: ID matches requested ID (4)",
+									"pm.test(\"ID matches requested ID (4)\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.id).to.eql(4);",
+									"});",
+									"",
+									"// Test: Status is one of the expected values ('pending', 'completed')",
+									"pm.test(\"Status is one of the expected values ('pending', 'completed')\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(['pending', 'completed']).to.include(jsonData.data.status);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tasks by Status (Pending)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that response status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse response JSON",
+									"var jsonData = pm.response.json();",
+									"",
+									"// Test that 'success' property is true",
+									"pm.test(\"Response has success property set to true\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"success\", true);",
+									"});",
+									"",
+									"// Test that 'count' property is 0",
+									"pm.test(\"Response has count property set to 0\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"count\", 0);",
+									"});",
+									"",
+									"// Test that 'status' property is 'pending'",
+									"pm.test(\"Response has status property set to 'pending'\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"status\", \"pending\");",
+									"});",
+									"",
+									"// Test that 'data' property is an array",
+									"pm.test(\"Response has data property as an array\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"array\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/status/pending",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"status",
+								"pending"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tasks by Status (Completed)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test: Response status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Test: Response body has 'success' property set to true",
+									"pm.test(\"Response has success: true\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"success\", true);",
+									"});",
+									"",
+									"// Test: Response body has 'status' property equal to 'completed'",
+									"pm.test(\"Response has status: 'completed'\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"status\", \"completed\");",
+									"});",
+									"",
+									"// Test: Response body has 'data' property as an array",
+									"pm.test(\"Response has data as an array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"array\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/status/completed",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"status",
+								"completed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that the response status code is 201",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"// Test that the response body has a 'success' property set to true",
+									"pm.test(\"Response has success property set to true\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"success\", true);",
+									"});",
+									"",
+									"// Test that the returned data object contains the expected properties",
+									"pm.test(\"Data object contains id, title, description, and status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"data\");",
+									"    pm.expect(jsonData.data).to.be.an(\"object\");",
+									"    pm.expect(jsonData.data).to.have.property(\"id\");",
+									"    pm.expect(jsonData.data).to.have.property(\"title\");",
+									"    pm.expect(jsonData.data).to.have.property(\"description\");",
+									"    pm.expect(jsonData.data).to.have.property(\"status\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Learn Express.js\",\r\n  \"description\": \"To be able to build APIs after Express.js tutorial\",\r\n  \"status\": \"pending\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Task (Minimal)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that response status code is 201",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"// Parse response JSON",
+									"var jsonData = pm.response.json();",
+									"",
+									"// Test that 'success' property is true",
+									"pm.test(\"Response has success: true\", function () {",
+									"    pm.expect(jsonData.success).to.eql(true);",
+									"});",
+									"",
+									"// Test that 'message' property equals 'Task created successfully'",
+									"pm.test(\"Response message is 'Task created successfully'\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Task created successfully\");",
+									"});",
+									"",
+									"// Test that 'data' object contains expected properties",
+									"pm.test(\"Data object contains id, title, description, and status\", function () {",
+									"    pm.expect(jsonData.data).to.be.an(\"object\");",
+									"    pm.expect(jsonData.data).to.have.property(\"id\");",
+									"    pm.expect(jsonData.data).to.have.property(\"title\");",
+									"    pm.expect(jsonData.data).to.have.property(\"description\");",
+									"    pm.expect(jsonData.data).to.have.property(\"status\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Piano Lessons\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body has success property set to true\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"success\", true);",
+									"});",
+									"",
+									"pm.test(\"Response body contains updated task properties\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"task\");",
+									"    pm.expect(jsonData.task).to.have.property(\"title\", \"Updated Title\");",
+									"    pm.expect(jsonData.task).to.have.property(\"description\", \"changed the title\");",
+									"    pm.expect(jsonData.task).to.have.property(\"status\", \"Completed\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Updated Title\",\r\n  \"description\": \"changed the title\",\r\n  \"status\": \"Completed\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks/3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse response JSON",
+									"var jsonData = pm.response.json();",
+									"",
+									"// Test that success is true",
+									"pm.test(\"Response has success: true\", function () {",
+									"    pm.expect(jsonData.success).to.eql(true);",
+									"});",
+									"",
+									"// Test that message indicates successful deletion",
+									"pm.test(\"Message indicates task was deleted successfully\", function () {",
+									"    pm.expect(jsonData.message).to.include(\"Task deleted successfully\");",
+									"});",
+									"",
+									"// Test that data object contains expected id and title",
+									"pm.test(\"Data object contains expected id and title\", function () {",
+									"    pm.expect(jsonData.data).to.be.an(\"object\");",
+									"    pm.expect(jsonData.data.id).to.eql(10);",
+									"    pm.expect(jsonData.data.title).to.eql(\"Piano Lessons\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Piano Lessons\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks/10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Task Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that response status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Test that response body has success property set to true",
+									"pm.test(\"Response has success: true\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.eql(true);",
+									"});",
+									"",
+									"// Test that message property contains 'Task status toggled'",
+									"pm.test(\"Message contains 'Task status toggled'\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.include(\"Task status toggled\");",
+									"});",
+									"",
+									"// Test that data object contains expected task id and status",
+									"pm.test(\"Data object contains expected id and status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.have.property(\"id\", 10);",
+									"    pm.expect(jsonData.data).to.have.property(\"status\", \"completed\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Updated Title\",\r\n  \"description\": \"changed the title\",\r\n  \"status\": \"Completed\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks/10/toggle",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"10",
+								"toggle"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bulk Operations (New)",
+			"item": [
+				{
+					"name": "Bulk Toggle by Status (Pending tasks to Completed)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test: Status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Test: Response body has success set to true",
+									"pm.test(\"Response body has success set to true\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.eql(true);",
+									"});",
+									"",
+									"// Test: Message confirms the toggle action",
+									"pm.test(\"Message confirms the toggle action\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.include('toggled');",
+									"    pm.expect(jsonData.message).to.include('pending');",
+									"    pm.expect(jsonData.message).to.include('completed');",
+									"});",
+									"",
+									"// Test: Data object contains expected properties",
+									"pm.test(\"Data object contains expected oldStatus, newStatus, and affectedTasks\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.have.property('oldStatus', 'pending');",
+									"    pm.expect(jsonData.data).to.have.property('newStatus', 'completed');",
+									"    pm.expect(jsonData.data).to.have.property('affectedTasks');",
+									"    pm.expect(jsonData.data.affectedTasks).to.be.a('number');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/bulk/toggle-status/pending",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"bulk",
+								"toggle-status",
+								"pending"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bulk Toggle by Status (Completed tasks to Pending)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test: Status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Test: Response body has success: true",
+									"pm.test(\"Response body has success: true\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.eql(true);",
+									"});",
+									"",
+									"// Test: Message contains confirmation of toggling",
+									"pm.test(\"Message contains confirmation of toggling\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.include(\"toggled\");",
+									"    pm.expect(jsonData.message).to.include(\"completed\");",
+									"    pm.expect(jsonData.message).to.include(\"pending\");",
+									"});",
+									"",
+									"// Test: Data object contains expected properties",
+									"pm.test(\"Data object contains expected oldStatus, newStatus, and affectedTasks\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.have.property(\"oldStatus\", \"completed\");",
+									"    pm.expect(jsonData.data).to.have.property(\"newStatus\", \"pending\");",
+									"    pm.expect(jsonData.data).to.have.property(\"affectedTasks\");",
+									"    pm.expect(jsonData.data.affectedTasks).to.be.a(\"number\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/bulk/toggle-status/completed",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"bulk",
+								"toggle-status",
+								"completed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bulk Toggle All Tasks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test: Status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Test: success property is true",
+									"pm.test(\"Response has success: true\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.eql(true);",
+									"});",
+									"",
+									"// Test: message property matches expected success message",
+									"pm.test(\"Response message matches expected\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"Successfully toggled all 1 task(s)\");",
+									"});",
+									"",
+									"// Test: count property is a positive integer",
+									"pm.test(\"Count is a positive integer\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.count).to.be.a(\"number\");",
+									"    pm.expect(jsonData.count).to.be.above(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/bulk/toggle-all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"bulk",
+								"toggle-all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bulk Delete By Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse response JSON",
+									"let jsonData;",
+									"try {",
+									"    jsonData = pm.response.json();",
+									"} catch (e) {",
+									"    jsonData = {};",
+									"}",
+									"",
+									"// Test that success is true",
+									"pm.test(\"Response has success set to true\", function () {",
+									"    pm.expect(jsonData.success).to.eql(true);",
+									"});",
+									"",
+									"// Test that message confirms deletion",
+									"pm.test(\"Message confirms deletion\", function () {",
+									"    pm.expect(jsonData.message).to.include(\"deleted\");",
+									"    pm.expect(jsonData.message).to.include(\"completed\");",
+									"});",
+									"",
+									"// Test that data object contains expected properties",
+									"pm.test(\"Data object contains expected properties\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"data\");",
+									"    pm.expect(jsonData.data).to.have.property(\"deletedCount\");",
+									"    pm.expect(jsonData.data).to.have.property(\"deletedTaksIds\");",
+									"    pm.expect(jsonData.data).to.have.property(\"remainingTasks\");",
+									"    pm.expect(jsonData.data).to.have.property(\"deletedStatus\");",
+									"});",
+									"",
+									"// Test that deletedStatus is 'completed'",
+									"pm.test(\"deletedStatus is 'completed'\", function () {",
+									"    pm.expect(jsonData.data.deletedStatus).to.eql(\"completed\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/bulk/delete-status/completed",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"bulk",
+								"delete-status",
+								"completed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bulk Delete All (Without Confirmation)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test: Status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Test: Response body has success property set to true",
+									"pm.test(\"Response body has success property set to true\", function () {",
+									"    var jsonData = {};",
+									"    try {",
+									"        jsonData = pm.response.json();",
+									"    } catch (e) {",
+									"        // If not JSON, fail the test",
+									"        pm.expect.fail(\"Response is not valid JSON\");",
+									"    }",
+									"    pm.expect(jsonData).to.have.property(\"success\", true);",
+									"});",
+									"",
+									"// Test: Response does not contain any error messages",
+									"pm.test(\"Response does not contain any error messages\", function () {",
+									"    var jsonData = {};",
+									"    try {",
+									"        jsonData = pm.response.json();",
+									"    } catch (e) {",
+									"        // If not JSON, fail the test",
+									"        pm.expect.fail(\"Response is not valid JSON\");",
+									"    }",
+									"    pm.expect(jsonData).to.not.have.property(\"error\");",
+									"    pm.expect(jsonData).to.not.have.property(\"errors\");",
+									"    if (jsonData.message) {",
+									"        pm.expect(jsonData.message.toLowerCase()).to.not.include(\"error\");",
+									"    }",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/bulk/delete-all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"bulk",
+								"delete-all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bulk Delete All (With Safety)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test: Status code is 200",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse response JSON",
+									"let jsonData;",
+									"try {",
+									"    jsonData = pm.response.json();",
+									"} catch (e) {",
+									"    jsonData = {};",
+									"}",
+									"",
+									"// Test: success is true",
+									"pm.test(\"Response body contains success: true\", function () {",
+									"    pm.expect(jsonData.success).to.eql(true);",
+									"});",
+									"",
+									"// Test: message confirms deletion",
+									"pm.test(\"Message confirms deletion\", function () {",
+									"    pm.expect(jsonData.message).to.match(/Successfully deleted all \\\\d+ task\\(s\\)/);",
+									"});",
+									"",
+									"// Test: count matches number of deleted tasks",
+									"pm.test(\"Count matches number of deleted tasks\", function () {",
+									"    pm.expect(jsonData.count).to.eql(Array.isArray(jsonData.data && jsonData.data.deletedTaskIds) ? jsonData.data.deletedTaskIds.length : undefined);",
+									"});",
+									"",
+									"// Test: data object contains expected properties with correct types",
+									"pm.test(\"Data object contains deletedCount, deletedTaskIds, and remainingTasks with correct types\", function () {",
+									"    pm.expect(jsonData.data).to.be.an(\"object\");",
+									"    pm.expect(jsonData.data).to.have.property(\"deletedCount\").that.is.a(\"number\");",
+									"    pm.expect(jsonData.data).to.have.property(\"deletedTaskIds\").that.is.an(\"array\");",
+									"    pm.expect(jsonData.data).to.have.property(\"remainingTasks\").that.is.a(\"number\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/bulk/delete-all?confirm=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"bulk",
+								"delete-all"
+							],
+							"query": [
+								{
+									"key": "confirm",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

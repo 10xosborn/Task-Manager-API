@@ -1,7 +1,7 @@
 let tasks = [
     {
         id: 1,
-        title: "Buy grocerries",
+        title: "Buy groceries",
         description: "Milk, Bread, Eggs, Butter",
         status: "pending"
     },
@@ -26,6 +26,6 @@ let tasks = [
 ];
 
 
-let nextID = 5;
+let nextId = 5; //Initial next ID value for new tasks
 
-modules.exports = { tasks, nextID };
+module.exports = { tasks, nextId };
