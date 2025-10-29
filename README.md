@@ -4,7 +4,7 @@ A simple and efficient REST API for managing tasks built with Express.js and Nod
 
 ## 👥 Team Members
 - **Person 1** - Osborn Tulasi - @10xosborn (https://github.com/10xosborn)
-- **Person 2** - [Partner's Name] - [@partner-github-username](https://github.com/partner-github-username)
+- **Person 2** - Akinyele Abiola John - @AbiolaJohnAkinyele (https://github.com/AbiolaJohnAkinyele)
 
 **Course:** BeTechified Backend Development - Capstone Project  
 **Submission Date:** October 30, 2025  
