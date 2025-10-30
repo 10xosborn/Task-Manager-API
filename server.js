@@ -1,17 +1,17 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const app = express();
-const port = process.env.PORT || 3000;
-
 //Load environment variables first
-dotenv.config();
+require('dotenv').config();
+
+const express = require('express');
+const app = express();
+const port = process.env.PORT;
+
 
 //Middleware to pass JSON data
 app.use(express.json());
 
 //Basic route
 app.get('/', (req, res) => {
-    res.json({
+    res.status(200).json({
         message: "Welcome to Task Manager API",
         version: "1.0.0",
         endpoints: {
