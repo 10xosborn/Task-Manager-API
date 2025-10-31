@@ -222,7 +222,7 @@ MIT License - Copyright (c) 2025
 ---
 
 *Built with ❤️ by* 
-**Osborn Tulasi**
-**Abioala John Akinyele**
-**Lolya Pepple** 
+**Osborn Tulasi**, 
+**Abioala John Akinyele**, 
+**Lolya Pepple** and  
 **Edward Anyo**
