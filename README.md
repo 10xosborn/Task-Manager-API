@@ -210,15 +210,19 @@ Task Manager API/
 
 ## 📄 License
 
-MIT License - Copyright (c) 2025 [Your Names]
+MIT License - Copyright (c) 2025 
 
 ---
 
 ## 📞 Contact
 
-- **GitHub:** [10xosborn](https://github.com/10xosborn)
+- **GitHub:** https://github.com/10xosborn
 - **Course:** BeTechified Backend Development
 
 ---
 
-**Built with ❤️ by [Your Name] and [Partner's Name]**
+*Built with ❤️ by* 
+**Osborn Tulasi**
+**Abioala John Akinyele**
+**Lolya Pepple** 
+**Edward Anyo**
